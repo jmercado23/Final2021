@@ -35,7 +35,6 @@ barchartGC(~infected + treatment,data=Males, type="percent")
 
 The bar chart shows us that those who took the placebo got sick more than the males who took Covid91. We can see that the pink bar for placebo is almost double in size compared to the drug. This shows that the drug is effective for the Males group. 
 
-
 ## Numerical Summaries
 ```{r}
 table1 <- xtabs(~infected + treatment, data=Males)
@@ -51,7 +50,29 @@ colPerc(table1)
 chisq.test(table1)
 chisqtestGC(table1)
 fisher.test(table1)
+Malesmod <- fisher.test(table1)
 ```
+
+Based off Chi-squared test, the p-value is very small(2.2e-16). This indicates that we need to reject the null hypothesis and that there is a difference between the males who took the placebo and those Males who took the drug. 
+
+```{r}
+MaleEstimate <- Malesmod$estimate
+Malelow <- Malesmod$conf.int[1]
+Malehigh <- Malesmod$conf.int[2]
+
+Malelowprob <- Malelow / (1 + Malelow) 
+Maleloweffect <- Malelowprob * 100
+
+Malehighprob <- Malehigh / (1+ Malehigh)
+Malehigheffect <- Malehighprob *100 
+
+Maleprob <- MaleEstimate / (1+ MaleEstimate)
+MaleEffect <- Maleprob * 100
+options(digits = 1)
+```
+
+The effectiveness of the Covid91 vaccine for Males is `r MaleEffect`. The confidence interval for males is `r Maleloweffect` to `r Malehigheffect`
+
 
 # Females
 
