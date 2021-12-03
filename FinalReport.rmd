@@ -26,11 +26,9 @@ A new  preventative vaccine (covid91) is under test in clinical trials. Given th
 ```{r}
 Males <- filter(Covid91, sex == "Man")
 ```
-
 ```{r}
 barchartGC(~infected + treatment,data=Males)
 barchartGC(~infected + treatment,data=Males, type="percent")
-
 ```
 
 The bar chart shows us that those who took the placebo got sick more than the males who took Covid91. We can see that the pink bar for placebo is almost double in size compared to the drug. This shows that the drug is effective for the Males group. 
@@ -55,6 +53,8 @@ Malesmod <- fisher.test(table1)
 
 Based off Chi-squared test, the p-value is very small(2.2e-16). This indicates that we need to reject the null hypothesis and that there is a difference between the males who took the placebo and those Males who took the drug. 
 
+# Calculating Effectiveness
+
 ```{r}
 MaleEstimate <- Malesmod$estimate
 Malelow <- Malesmod$conf.int[1]
@@ -73,12 +73,158 @@ options(digits = 1)
 
 The effectiveness of the Covid91 vaccine for Males is `r MaleEffect`. The confidence interval for males is `r Maleloweffect` to `r Malehigheffect`
 
-
 # Females
+
+```{r}
+Females <- filter(Covid91, sex == "Woman")
+```
+```{r}
+barchartGC(~infected + treatment,data=Females)
+barchartGC(~infected + treatment,data=Females, type="percent")
+```
+
+Based on the bar chart above, this vaccine is not effective for Females. The blue bar shows that out of the Females who are sick, more than 50% had taken the vaccine. 
+
+## Numerical Summaries
+```{r}
+table1 <- xtabs(~infected + treatment, data=Females)
+rowPerc(table1)
+colPerc(table1)
+```
+
+This table reassures that the Females who got sick, 58% of them had taken the vaccine, versus 42% of the sick that took the placebo. Therefore from this information we see that the vaccine seems to not be effective for Females. 
+
+## Inferential  
+
+```{r}
+chisq.test(table1)
+chisqtestGC(table1)
+fisher.test(table1)
+Femalesmod <- fisher.test(table1)
+```
+
+Since our p-value is very small, we have to reject the null Hypothesis, indicating that there is a difference between our data. In this case, it looks like the data is different in a bad way, as in the drug is not effective compared to the plocebo. 
+
+# Calculating Effectiveness
+
+```{r}
+FemaleEstimate <- Femalesmod$estimate
+Femalelow <- Femalesmod$conf.int[1]
+Femalehigh <- Femalesmod$conf.int[2]
+
+Femalelowprob <- Femalelow / (1 + Femalelow) 
+Femaleloweffect <- Femalelowprob * 100
+
+Femalehighprob <- Femalehigh / (1+ Femalehigh)
+Femalehigheffect <- Femalehighprob *100 
+
+Femaleprob <- FemaleEstimate / (1+ FemaleEstimate)
+FemaleEffect <- Femaleprob * 100
+options(digits = 1)
+```
+
+The effectiveness of the Covid91 vaccine for Females is `r FemaleEffect`. The confidence interval for Females is `r Femaleloweffect` to `r Femalehigheffect`
+
 
 # Drug Users
 
+```{r}
+DrugUsers <- filter(Covid91, DrugUser == "yes")
+```
+```{r}
+barchartGC(~infected + treatment,data=DrugUsers)
+barchartGC(~infected + treatment,data=DrugUsers, type="percent")
+```
+
+## Numerical Summaries
+```{r}
+table1 <- xtabs(~infected + treatment, data=DrugUsers)
+rowPerc(table1)
+colPerc(table1)
+```
+
+## Inferential  
+
+```{r}
+chisq.test(table1)
+chisqtestGC(table1)
+fisher.test(table1)
+DrugUsersmod <- fisher.test(table1)
+```
+
+# Calculating Effectiveness
+
+```{r}
+DrugUsersEstimate <- DrugUsersmod$estimate
+DrugUserslow <- DrugUsersmod$conf.int[1]
+DrugUsershigh <- DrugUsersmod$conf.int[2]
+
+DrugUserslowprob <- DrugUserslow / (1 + DrugUserslow) 
+DrugUsersloweffect <- DrugUserslowprob * 100
+
+DrugUsershighprob <- DrugUsershigh / (1+ DrugUsershigh)
+DrugUsershigheffect <- DrugUsershighprob *100 
+
+DrugUsersprob <- DrugUsersEstimate / (1+ DrugUsersEstimate)
+DrugUsersEffect <- DrugUsersprob * 100
+options(digits = 1)
+```
+
+The effectiveness of the Covid91 vaccine for Drug Users is `r DrugUsersEffect`. The confidence interval for DrugUsers is `r DrugUsersloweffect` to `r DrugUsershigheffect`
+
 # LGBTQ
+
+```{r}
+LGBTQ <- filter(Covid91, LGBTQ == "gay")
+```
+```{r}
+barchartGC(~infected + treatment,data=LGBTQ)
+barchartGC(~infected + treatment,data=LGBTQ, type="percent")
+```
+
+According to the bar chart, the LGBTQ does not benefit from taking this drug. In our sick group, more than 50% had taken the drug. 
+
+## Numerical Summaries
+```{r}
+table1 <- xtabs(~infected + treatment, data=LGBTQ)
+rowPerc(table1)
+colPerc(table1)
+```
+
+This chart tells us that there LGBTQ should not take this drug, as 71% of those who were sick had taken the drug versus 29% of the sick people had not. 
+
+## Inferential  
+
+```{r}
+chisq.test(table1)
+chisqtestGC(table1)
+fisher.test(table1)
+LGBTQmod <- fisher.test(table1)
+```
+
+Based off Chi-squared test, the p-value is very small(6e-06). This indicates that we need to reject the null hypothesis and that there is a difference between the LGBTQ who took the placebo and the LGBTQ who took the drug. In this case the difference is in an ineffective, as there are more people who got infected while on the drug. 
+
+# Calculating Effectiveness
+
+```{r}
+LGBTQEstimate <- LGBTQmod$estimate
+LGBTQlow <- LGBTQmod$conf.int[1]
+LGBTQhigh <- LGBTQmod$conf.int[2]
+
+LGBTQlowprob <- LGBTQlow / (1 + LGBTQlow) 
+LGBTQloweffect <- LGBTQlowprob * 100
+
+LGBTQhighprob <- LGBTQhigh / (1+ LGBTQhigh)
+LGBTQhigheffect <- LGBTQhighprob *100 
+
+LGBTQprob <- LGBTQEstimate / (1+ LGBTQEstimate)
+LGBTQEffect <- LGBTQprob * 100
+options(digits = 1)
+```
+
+The effectiveness of the Covid91 vaccine for LGBTQ community is `r LGBTQEffect`. The confidence interval for LGBTQ community is `r LGBTQloweffect` to `r LGBTQhigheffect`
+
 
 # Conclusions and recommendations
 
+In conclusion it was effective towards males and less effective towards the females.It got lower with the drug users and as well with the LGBTQ community. The smaller the number got and didnt affect the rest like it did for males.  
